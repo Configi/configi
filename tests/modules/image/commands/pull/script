@@ -55,7 +55,7 @@ cp "$CREDS" "$TMPDIR/CREDS"
     if [ -f "${NAME}/${TAG}.log" ]
     then
         print "Changelog:    --------------"
-        cat "${NAME}/${TAG}.log"
+        fold -c -s "${NAME}/${TAG}.log"
         print "----------------------------"
     fi
     print "Copying to local storage..."
