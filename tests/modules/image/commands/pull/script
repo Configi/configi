@@ -42,7 +42,7 @@ cp "$CREDS" "$TMPDIR/CREDS"
     printf '%s\n' "${PASS}" > ./PASS
     chmod 0600 ./PASS
     print "Downloading image from rsync repository..."
-    /usr/bin/rsync --password-file=./PASS --stats -h -W "${LOGIN}@${HOST}::${NAME}/${TAG}" ./IMAGE.tar.xz
+    /usr/bin/rsync --password-file=./PASS -L --stats -h -W "${LOGIN}@${HOST}::${NAME}/${TAG}" ./IMAGE.tar.xz
     print "Extracting image..."
     /usr/bin/tar -xJf IMAGE.tar.xz
     if [ "$UNSIGNED" != "true" ]
