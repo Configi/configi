@@ -28,12 +28,14 @@ for x in skopeo tar xz scp opmsg
 do
     [ -x "/usr/bin/$x" ] || { echo >&2 "Runtime requirement /usr/bin/$x not found." ; exit 1 ; }
 done
+[ -f "$CHANGELOG" ] &&
+CHANGELOG=$(<"$CHANGELOG")
 TMPDIR=$(mktemp -d -p .)
 1>/dev/null pushd "${TMPDIR}"
     DEST=$(cut -f1 -d:<<<"$ARG")
     TAG=$(cut -f2 -d:<<<"$ARG")
     /usr/bin/mkdir "${DEST}"
-    [ -f "$CHANGELOG" ] && cp "${CHANGELOG}" "${DEST}/${TAG}.log"
+    [ "$CHANGELOG" != "" ] && printf '%s\n' "$CHANGELOG" > "${DEST}/${TAG}.log"
     print "Converting local image to oci-archive..."
     /usr/bin/skopeo copy "containers-storage:${IMAGE}" "oci-archive:${DEST}/${TAG}"
     print "Compressing image before pushing..."
