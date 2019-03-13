@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 #/ command: image:push: "Push container image to remote rsync registry via SSH"
-#/ usage: rerun image:push  --arg <> [ --comment <>] [ --verbose <>] [ --register <>] [ --requires <>]  --host <> [ --unsigned <false>]  --image <>
+#/ usage: rerun image:push  --arg <> [ --comment <>] [ --verbose <>] [ --register <>] [ --requires <>]  --host <> [ --unsigned <false>]  --image <> [ --changelog <>]
 #/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
-#/ option-variables: ARG COMMENT VERBOSE REGISTER REQUIRES HOST UNSIGNED IMAGE
+#/ option-variables: ARG COMMENT VERBOSE REGISTER REQUIRES HOST UNSIGNED IMAGE CHANGELOG
 
 . "$RERUN_MODULE_DIR/lib/functions.sh" "push" || {
   echo >&2 "Failed loading function library." ; exit 1 ;
@@ -33,6 +33,7 @@ TMPDIR=$(mktemp -d -p .)
     DEST=$(cut -f1 -d:<<<"$ARG")
     TAG=$(cut -f2 -d:<<<"$ARG")
     /usr/bin/mkdir "${DEST}"
+    [ -f "$CHANGELOG" ] && cp "${CHANGELOG}" "${DEST}/${TAG}.log"
     print "Converting local image to oci-archive..."
     /usr/bin/skopeo copy "containers-storage:${IMAGE}" "oci-archive:${DEST}/${TAG}"
     print "Compressing image before pushing..."
