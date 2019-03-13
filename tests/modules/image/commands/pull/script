@@ -52,6 +52,12 @@ cp "$CREDS" "$TMPDIR/CREDS"
     fi
     print "Checking checksum..."
     /usr/bin/sha256sum -c < "${NAME}/${TAG}.sha256"
+    if [ -f "${NAME}/${TAG}.log" ]
+    then
+        print "Changelog:    --------------"
+        cat "${NAME}/${TAG}.log"
+        print "----------------------------"
+    fi
     print "Copying to local storage..."
     /usr/bin/skopeo copy "oci-archive:${NAME}/${TAG}" "containers-storage:${NAME}:${TAG}"
 1>/dev/null popd
