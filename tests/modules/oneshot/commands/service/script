@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+#/ command: oneshot:service: "Ensure script is managed by systemd"
+#/ usage: rerun oneshot:service  --arg <> [ --comment <>] [ --verbose <>] [ --register <>] [ --requires <>]  --name <>  --start <>  --stop <>
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: ARG COMMENT VERBOSE REGISTER REQUIRES NAME START STOP
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "service" || {
+  echo >&2 "Failed loading function library." ; exit 1 ;
+}
+
+set -o errexit -o nounset -o pipefail -o errtrace
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+# Put the command implementation here.
+# - - -
+. "$RERUN_MODULES/lib/functions.sh"
+. "$RERUN_MODULES/lib/systemd.sh"
+THIS="$RERUN_MODULE_DIR/commands/service"
+OSVC=oneshot.service
+SVC="oneshot:${NAME}.service"
+print "Stopping existing unit..."
+unit_stop "$SVC"
+print "Generating systemd unit..."
+sed "s|__NAME__|$NAME|g" "$THIS/$OSVC" > "/etc/systemd/system/$SVC"
+install -m 0755 -D "$START" "/usr/local/bin/oneshot__${NAME}__start.sh"
+install -m 0755 -D "$STOP" "/usr/local/bin/oneshot__${NAME}__stop.sh"
+print "Enabling and starting service..."
+unit_start "$SVC"
+print "DONE."
+exit 112
