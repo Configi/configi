@@ -26,6 +26,7 @@ export OPTS=""
 . "$RERUN_MODULES/lib/buildah.sh"
 RUN /sbin/apk upgrade --no-cache --available --no-progress
 RUN /sbin/apk add --no-cache --no-progress tinyproxy
+RUN deluser tinyproxy
 RUN adduser -D -u 63128 -s /sbin/nologin tinyproxy
 CLEAR /tmp
 ENTRYPOINT '["/usr/bin/tinyproxy", "-d", "-c", "/host/conf/tinyproxy.conf"]'
