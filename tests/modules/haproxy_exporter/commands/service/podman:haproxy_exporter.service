@@ -1,0 +1,21 @@
+[Unit]
+Description=haproxy_exporter Container
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+PrivateNetwork=false
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+NoNewPrivileges=true
+KillSignal=SIGTERM
+Restart=always
+RestartSec=5s
+LimitNOFILE=8192
+ExecStartPre=-/usr/bin/mkdir -p /srv/haproxy
+ExecStartPre=-/usr/bin/podman stop haproxy_exporter
+ExecStartPre=-/usr/bin/podman rm haproxy_exporter
+ExecStop=/usr/bin/podman stop haproxy_exporter
+ExecStart=/usr/bin/podman run --security-opt apparmor=unconfined -v /srv/haproxy:/host --name haproxy_exporter --network host --rm --ulimit nofile=4192:8192 __IMAGE__
