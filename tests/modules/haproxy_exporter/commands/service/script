@@ -19,6 +19,8 @@ rerun_options_parse "$@"
 # - - -
 # Put the command implementation here.
 # - - -
+. "$RERUN_MODULES/lib/functions.sh"
+. "$RERUN_MODULES/lib/systemd.sh"
 THIS="$RERUN_MODULE_DIR/commands/service"
 SVC="podman:haproxy_exporter.service"
 print "Stopping existing unit..."
