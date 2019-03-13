@@ -9,8 +9,7 @@ trap unit_cleanup ERR
 unit_start()
 {
     /usr/bin/systemctl daemon-reload
-    /usr/bin/systemctl enable "$1"
-    /usr/bin/systemctl start "$1"
+    /usr/bin/systemctl --now enable "$1"
 }
 
 unit_install()
