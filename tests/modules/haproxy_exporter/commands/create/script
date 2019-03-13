@@ -25,7 +25,7 @@ PRINT "+H" "Downloading haproxy_exporter version $VERSION..."
 TMPDIR=$(mktemp -d -p .)
 1>/dev/null pushd "$TMPDIR"
     wget "https://github.com/prometheus/haproxy_exporter/releases/download/v${VERSION}/haproxy_exporter-${VERSION}.linux-amd64.tar.gz"
-    tar -xf "haproxy_exporter-${VERSION}.linux-amd64"
+    tar -xf "haproxy_exporter-${VERSION}.linux-amd64.tar.gz"
     COPY "haproxy_exporter-${VERSION}.linux-amd64/haproxy_exporter" /
 1>/dev/null popd
 rm -rf "$TMPDIR"
