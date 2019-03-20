@@ -3,5 +3,5 @@
 # Wed 20 Mar 2019 06:15:20 AM UTC
 NAME=service
 DESCRIPTION="Ensure script is managed by systemd"
-OPTIONS="arg comment verbose register requires rules"
+OPTIONS="arg comment verbose register requires"
 GENERATE_HELP="true"
