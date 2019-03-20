@@ -22,7 +22,7 @@ rerun_options_parse "$@"
 . "$RERUN_MODULES/lib/functions.sh"
 . "$RERUN_MODULES/lib/systemd.sh"
 THIS="$RERUN_MODULE_DIR/commands/service"
-SVC="$THIS/nftables.service"
+SVC="nftables.service"
 print "Stopping existing unit..."
 unit_stop "$SVC"
 print "Installing unit..."
@@ -32,7 +32,7 @@ then
 else
     install -m 0600 -o root -g root "$THIS/nftables.conf" /etc/nftables.conf
 fi
-unit_install "$SVC"
+unit_install "$THIS/$SVC"
 print "Enabling and starting service..."
 unit_start "$SVC"
 print "DONE."
