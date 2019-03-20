@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+#/ command: nftables:service: "Ensure script is managed by systemd"
+#/ usage: rerun nftables:service  --arg <> [ --comment <>] [ --verbose <>] [ --register <>] [ --requires <>] [ --rules <>]
+#/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
+#/ option-variables: ARG COMMENT VERBOSE REGISTER REQUIRES RULES
+
+. "$RERUN_MODULE_DIR/lib/functions.sh" "service" || {
+  echo >&2 "Failed loading function library." ; exit 1 ;
+}
+
+set -o errexit -o nounset -o pipefail
+
+rerun_options_parse "$@"
+
+# Command implementation
+# ----------------------
+
+# - - -
+# Put the command implementation here.
+# - - -
+. "$RERUN_MODULES/lib/functions.sh"
+. "$RERUN_MODULES/lib/systemd.sh"
+THIS="$RERUN_MODULE_DIR/commands/service"
+SVC="nftables.service"
+print "Stopping existing unit..."
+unit_stop "$SVC"
+print "Installing unit..."
+if [ -f "$RULES" ]
+then
+    install -m 0600 -o root -g root "$RULES" /etc/nftables.conf
+else
+    install -m 0600 -o root -g root "$THIS/nftables.conf" /etc/nftables.conf
+fi
+unit_install "$SVC"
+print "Enabling and starting service..."
+unit_start "$SVC"
+print "DONE."
+exit 112
+
